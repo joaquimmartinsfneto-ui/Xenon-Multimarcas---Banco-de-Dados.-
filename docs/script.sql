@@ -102,6 +102,7 @@ INSERT INTO Funcionario (nm_funcionario, nr_cpf, nr_telefone, ds_cargo) VALUES
 ('Lucas Gabriel', '44455566677', '11933338899', 'Atendente de Pátio');
 
 INSERT INTO Veiculo (ds_chassi, nm_marca, nm_modelo, nr_ano, vl_preco, tp_veiculo, st_veiculo) VALUES
+('9BWZZZ474T001234', 'Chevrolet', 'Onix Plus', 2020, 85000.00, 'Sedan', 'Disponivel'),
 ('9BWZZZ377VT001234', 'Chevrolet', 'Onix Plus', 2024, 85000.00, 'Sedan', 'Vendido'),
 ('93HZZZ255MK987654', 'Toyota', 'Corolla Cross', 2025, 160000.00, 'SUV', 'Vendido'),
 ('9BMZZZ488KL456789', 'Volkswagen', 'Nivus Highline', 2024, 125000.00, 'SUV', 'Disponível'),
