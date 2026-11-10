@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dicionário de Dados Conceitual — Sistema de Gestão Xenon Multimarcas.">
+    <meta name="theme-color" content="#101827">
+    <title>Dicionário de Dados | Xenon Multimarcas</title>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --background: #f3f6fb;
+            --surface: #ffffff;
+            --text: #172033;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --header: #101827;
+            --success: #15803d;
+            --shadow: 0 8px 30px rgba(15, 23, 42, .06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, .3);
+            outline-offset: 2px;
+        }
+
+        .topbar {
+            background: var(--header);
+            color: white;
+            padding: 28px 24px;
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary);
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: clamp(20px, 3vw, 27px);
+            letter-spacing: -.5px;
+        }
+
+        .brand p {
+            margin: 2px 0 0;
+            color: #aebbd0;
+            font-size: 13px;
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 30px auto 24px;
+            padding: 0 24px;
+        }
+
+        .hero h2 {
+            margin: 0 0 8px;
+            font-size: clamp(23px, 4vw, 32px);
+            letter-spacing: -.7px;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 24px 48px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 19px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            display: block;
+            margin-top: 5px;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -.8px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            padding: 18px;
+            margin-bottom: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1 1 280px;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .search {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 14px 10px 40px;
+            color: var(--text);
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .search:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .btn {
+            min-height: 42px;
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+        }
+
+        .btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .btn-primary {
+            color: white;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            color: white;
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+            padding-top: 4px;
+        }
+
+        .filter-btn {
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: white;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            color: var(--primary-dark);
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .result-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .entity {
+            margin-bottom: 16px;
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .entity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            width: 100%;
+            padding: 19px 21px;
+            border: 0;
+            background: white;
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .entity-header:hover {
+            background: #f8fafc;
+        }
+
+        .entity-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .entity-icon {
+            display: grid;
+            flex-shrink: 0;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .entity-name {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .2px;
+        }
+
+        .entity-count {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .entity-toggle {
+            flex-shrink: 0;
+            color: var(--muted);
+            font-size: 21px;
+        }
+
+        .entity-content {
+            border-top: 1px solid var(--border);
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 13px 18px;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px 18px;
+            border-top: 1px solid #edf1f6;
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .field-name {
+            color: #1d4ed8;
+            font-family: Consolas, "Courier New", monospace;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .description {
+            min-width: 190px;
+            color: #475569;
+        }
+
+        .rule {
+            min-width: 280px;
+            color: #475569;
+        }
+
+        .empty-state {
+            display: none;
+            padding: 38px 20px;
+            margin-top: 15px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .footer {
+            padding: 22px 24px;
+            background: var(--header);
+            color: #aebbd0;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .footer strong {
+            color: white;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 700px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px 17px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+
+            .toolbar {
+                padding: 13px;
+            }
+
+            .toolbar-actions {
+                width: 100%;
+            }
+
+            .toolbar-actions .btn {
+                flex: 1;
+            }
+
+            .main, .hero {
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+
+            .topbar {
+                padding: 22px 15px;
+            }
+
+            .entity-header {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 12px 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+                animation-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-icon" aria-hidden="true">X</div>
+                <div>
+                    <h1>Xenon Multimarcas</h1>
+                    <p>Documentação técnica do banco de dados</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>Dicionário de Dados</h2>
+        <p>
+            Documentação conceitual das entidades, atributos,
+            descrições e regras de negócio do sistema de gestão.
+        </p>
+    </section>
+
+    <main class="main">
+        <section class="dashboard" aria-label="Resumo do dicionário">
+            <article class="stat-card">
+                <span class="stat-label">Entidades</span>
+                <strong class="stat-value" id="totalEntities">0</strong>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Atributos cadastrados</span>
+                <strong class="stat-value" id="totalFields">0</strong>
+            </article>
+            <article class="stat-card">
+                <span class="stat-label">Resultados encontrados</span>
+                <strong class="stat-value" id="visibleFields">0</strong>
+            </article>
+        </section>
+
+        <section class="toolbar" aria-label="Ferramentas do dicionário">
+            <div class="search-wrapper">
+                <span class="search-icon" aria-hidden="true">⌕</span>
+                <input
+                    class="search"
+                    id="searchInput"
+                    type="search"
+                    placeholder="Pesquisar atributo, descrição ou regra..."
+                    autocomplete="off"
+                    aria-label="Pesquisar no dicionário"
+                >
+            </div>
+
+            <div class="toolbar-actions">
+                <button class="btn btn-primary" id="expandAll" type="button">
+                    Expandir tudo
+                </button>
+                <button class="btn" id="collapseAll" type="button">
+                    Recolher tudo
+                </button>
+                <button class="btn" id="clearSearch" type="button">
+                    Limpar pesquisa
+                </button>
+            </div>
+
+            <div class="filter-row" id="filters" aria-label="Filtrar entidades">
+                <button class="filter-btn active" type="button" data-filter="all">
+                    Todas
+                </button>
+                <button class="filter-btn" type="button" data-filter="CLIENTE">
+                    Cliente
+                </button>
+                <button class="filter-btn" type="button" data-filter="FUNCIONARIO">
+                    Funcionário
+                </button>
+                <button class="filter-btn" type="button" data-filter="VEICULO">
+                    Veículo
+                </button>
+                <button class="filter-btn" type="button" data-filter="VENDA">
+                    Venda
+                </button>
+                <button class="filter-btn" type="button" data-filter="BANCO">
+                    Banco
+                </button>
+                <button class="filter-btn" type="button" data-filter="FINANCIAMENTO">
+                    Financiamento
+                </button>
+                <button class="filter-btn" type="button" data-filter="PEDIDO_DE_VENDA">
+                    Pedido de venda
+                </button>
+                <button class="filter-btn" type="button" data-filter="ENTREGA">
+                    Entrega
+                </button>
+            </div>
+        </section>
+
+        <div class="result-info">
+            <span id="resultText" aria-live="polite">Carregando dicionário...</span>
+            <span>Pesquisa por nome, descrição e restrições</span>
+        </div>
+
+        <section id="dictionary" aria-label="Entidades do dicionário"></section>
+
+        <div class="empty-state" id="emptyState" role="status">
+            <strong>Nenhum resultado encontrado</strong>
+            Tente pesquisar por outro termo ou limpar os filtros.
+        </div>
+    </main>
+
+    <footer class="footer">
+        <strong>Xenon Multimarcas</strong> · Dicionário de Dados Conceitual
+    </footer>
+
+    <script>
+        (() => {
+            "use strict";
+
+            const DATA = [
+                {
+                    name: "CLIENTE",
+                    icon: "C",
+                    fields: [
+                        ["id_cliente", "Identificador único do cliente", "PK, obrigatório e exclusivo para cada cliente cadastrado."],
+                        ["nm_cliente", "Nome completo do cliente seja civil ou social", "Obrigatório para identificação do cliente, devendo conter ao menos nome e sobrenome."],
+                        ["nr_cpf", "Cadastro de pessoa física do cliente", "Obrigatório, deve ser único para cada cliente e possuir formato válido com 11 dígitos numéricos."],
+                        ["nr_telefone", "Telefone principal de contato ou WhatsApp do cliente", "Obrigatório, deve conter DDD e número telefônico válido."],
+                        ["ds_email", "Endereço eletrônico de contato do cliente", "Opcional, quando preenchido deve possuir formato sintático de e-mail válido (ex: usuario@dominio.com)."],
+                        ["ds_endereco", "Endereço residencial completo do cliente", "Opcional, texto livre contendo logradouro, número, bairro, cidade, UF e CEP."]
+                    ]
+                },
+                {
+                    name: "FUNCIONARIO",
+                    icon: "F",
+                    fields: [
+                        ["id_funcionario", "Identificador único do funcionário", "PK, obrigatório e exclusivo para cada colaborador cadastrado no sistema."],
+                        ["nm_funcionario", "Nome completo do funcionário ou vendedor", "Obrigatório para qualificação e identificação nas vendas e comissões."],
+                        ["nr_cpf", "Cadastro de pessoa física do funcionário", "Obrigatório, único para cada colaborador e com validação de 11 dígitos numéricos."],
+                        ["ds_cargo", "Cargo ou função ocupada pelo colaborador na empresa", "Obrigatório, define a função exercida (ex: Vendedor, Gerente) e nível de acesso."],
+                        ["nr_telefone", "Telefone de contato do funcionário", "Obrigatório, deve incluir o código de área (DDD) e o número de telefone."]
+                    ]
+                },
+                {
+                    name: "VEICULO",
+                    icon: "V",
+                    fields: [
+                        ["id_veiculo", "Identificador único do veículo no sistema", "PK, obrigatório, numérico inteiro gerado automaticamente pelo sistema, exclusivo para cada veículo."],
+                        ["ds_chassi", "Número de identificação do veículo (VIN/Chassi)", "Obrigatório, deve ser único para cada veículo e possuir exatamente 17 caracteres alfanuméricos válidos."],
+                        ["nm_marca", "Marca ou fabricante do veículo", "Obrigatório, texto simples que identifica a fabricante (ex: Chevrolet, Volkswagen)."],
+                        ["nm_modelo", "Modelo comercial do veículo", "Obrigatório, texto simples que identifica o modelo do automóvel (ex: Onix, Gol)."],
+                        ["nr_ano", "Ano de fabricação e/ou modelo do veículo", "Obrigatório, valor numérico de 4 dígitos, devendo ser superior a 1900 e menor ou igual ao ano subsequente ao atual."],
+                        ["vl_preco", "Valor estipulado para venda do veículo", "Obrigatório, valor decimal estritamente positivo (maior que zero)."],
+                        ["tp_veiculo", "Tipo ou categoria de carroceria do veículo", "Opcional, classificação interna do automóvel (ex: Hatch, Sedan, SUV, Pickup)."],
+                        ["st_veiculo", "Situação atual da disponibilidade do veículo em estoque", "Obrigatório, valores possíveis restritos ao domínio: 'Disponível', 'Vendido', 'Reservado', 'Em Manutenção'."]
+                    ]
+                },
+                {
+                    name: "VENDA",
+                    icon: "V",
+                    fields: [
+                        ["id_venda", "Identificador único da transação de venda", "PK, obrigatório e exclusivo para cada registro de venda efetuado."],
+                        ["id_cliente", "Referência ao cliente comprador da venda", "FK, obrigatório, deve corresponder a um id_cliente válido e ativo na tabela CLIENTE (relacionamento 1:N)."],
+                        ["id_funcionario", "Referência ao funcionário responsável pela venda", "FK, obrigatório, deve corresponder a um id_funcionario válido na tabela FUNCIONARIO (relacionamento 1:N)."],
+                        ["id_veiculo", "Referência ao veículo comercializado na venda", "FK, obrigatório e único para vendas ativas, devendo corresponder a um id_veiculo válido em VEICULO (relacionamento 1:1)."],
+                        ["dt_venda", "Data e horário em que a venda foi efetuada", "Obrigatório, preenchido automaticamente com a data e hora do sistema; não aceita datas futuras."],
+                        ["vl_total", "Valor total fechado da negociação", "Obrigatório, deve ser um valor numérico decimal maior que zero."],
+                        ["ds_forma_pagamento", "Modalidade utilizada para quitação do valor da venda", "Obrigatório, valores possíveis restritos a: 'À Vista', 'Financiamento', 'Cartão de Crédito', 'PIX', 'Misto'."],
+                        ["st_venda", "Situação do andamento e fechamento da venda", "Obrigatório, valores possíveis restritos a: 'Pendente', 'Aprovada', 'Concluída', 'Cancelada'."]
+                    ]
+                },
+                {
+                    name: "BANCO",
+                    icon: "B",
+                    fields: [
+                        ["id_banco", "Identificador único da instituição financeira", "PK, obrigatório e exclusivo para cada banco/financeira parceira."],
+                        ["nm_banco", "Nome comercial ou razão social da instituição financeira", "Obrigatório, texto simples contendo a identificação do banco."],
+                        ["nr_cnpj", "Cadastro Nacional da Pessoa Jurídica do banco", "Obrigatório, único para cada banco e deve possuir formato válido com 14 dígitos numéricos."],
+                        ["nr_telefone", "Telefone de contato da central ou mesa de crédito do banco", "Opcional, deve conter o DDD e número telefônico."]
+                    ]
+                },
+                {
+                    name: "FINANCIAMENTO",
+                    icon: "F",
+                    fields: [
+                        ["id_financiamento", "Identificador único do contrato de financiamento", "PK, obrigatório e exclusivo para cada proposta ou contrato de financiamento."],
+                        ["id_banco", "Referência ao banco concessor do financiamento", "FK, obrigatório, deve corresponder a um id_banco válido na tabela BANCO (relacionamento 1:N)."],
+                        ["id_venda", "Referência à venda vinculada ao financiamento", "FK, obrigatório e único, deve corresponder a um id_venda válido na tabela VENDA (relacionamento 1:1 opcional)."],
+                        ["vl_financiado", "Valor total contratado e financiado pelo banco", "Obrigatório, deve ser um valor decimal estritamente positivo (maior que zero)."],
+                        ["qt_parcelas", "Quantidade total de parcelas acertadas no contrato", "Obrigatório, valor inteiro positivo (ex: 12, 24, 36, 48, 60)."],
+                        ["vl_parcela", "Valor cobrado em cada parcela mensal", "Obrigatório, deve ser um valor decimal estritamente positivo."],
+                        ["st_financiamento", "Status da análise de crédito e concessão do financiamento", "Obrigatório, valores possíveis restritos a: 'Em Análise', 'Aprovado', 'Recusado', 'Cancelado'."]
+                    ]
+                },
+                {
+                    name: "PEDIDO_DE_VENDA",
+                    icon: "P",
+                    fields: [
+                        ["id_pedido", "Identificador único do pedido burocrático de venda", "PK, obrigatório e exclusivo para cada pedido emitido."],
+                        ["id_venda", "Referência à venda correspondente ao pedido", "FK, obrigatório, deve corresponder a um id_venda válido na tabela VENDA."],
+                        ["dt_pedido", "Data de criação e processamento do pedido", "Obrigatório, preenchido automaticamente com a data corrente no momento do faturamento."],
+                        ["nr_nota_fiscal", "Número do documento fiscal (NF-e) emitido", "Opcional, preenchido obrigatoriamente após a emissão do faturamento fiscal do veículo."],
+                        ["nm_cartorio", "Nome do cartório responsável pelos trâmites de transferência", "Opcional, texto livre indicando a serventia extrajudicial para reconhecimento de firma e CRV."],
+                        ["st_pedido", "Situação do andamento burocrático do pedido", "Obrigatório, valores possíveis restritos a: 'Em Processamento', 'Aguardando Emissão', 'Faturado', 'Cancelado'."]
+                    ]
+                },
+                {
+                    name: "ENTREGA",
+                    icon: "E",
+                    fields: [
+                        ["id_entrega", "Identificador único da logística de entrega", "PK, obrigatório e exclusivo para cada agendamento de entrega."],
+                        ["id_venda", "Referência à venda correspondente à entrega", "FK, obrigatório, deve corresponder a um id_venda válido na tabela VENDA."],
+                        ["dt_prevista", "Data agendada para entrega ou retirada do veículo", "Obrigatório, deve ser uma data igual ou posterior à data do pedido de venda."],
+                        ["dt_entrega", "Data e hora em que o veículo foi efetivamente entregue", "Opcional, preenchido no momento em que a entrega é finalizada com sucesso."],
+                        ["ds_endereco_entrega", "Endereço estipulado para entrega física do veículo", "Opcional, texto livre especificando o local da entrega ou concessionária."],
+                        ["st_entrega", "Estado de progresso do fluxo logístico", "Obrigatório, valores possíveis restritos a: 'Agendada', 'Em Preparação', 'Pronto para Retirada', 'Entregue', 'Cancelada'."]
+                    ]
+                }
+            ];
+
+            const elements = {
+                dictionary: document.getElementById("dictionary"),
+                search: document.getElementById("searchInput"),
+                totalEntities: document.getElementById("totalEntities"),
+                totalFields: document.getElementById("totalFields"),
+                visibleFields: document.getElementById("visibleFields"),
+                resultText: document.getElementById("resultText"),
+                emptyState: document.getElementById("emptyState"),
+                filters: document.getElementById("filters"),
+                expandAll: document.getElementById("expandAll"),
+                collapseAll: document.getElementById("collapseAll"),
+                clearSearch: document.getElementById("clearSearch")
+            };
+
+            const state = {
+                filter: "all",
+                query: ""
+            };
+
+            const normalize = (value) =>
+                String(value ?? "")
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLocaleLowerCase("pt-BR")
+                    .trim();
+
+            function createElement(tag, className, text) {
+                const element = document.createElement(tag);
+
+                if (className) {
+                    element.className = className;
+                }
+
+                if (text !== undefined) {
+                    element.textContent = text;
+                }
+
+                return element;
+            }
+
+            function render() {
+                if (!elements.dictionary) return;
+
+                const fragment = document.createDocumentFragment();
+
+                DATA.forEach((entity, entityIndex) => {
+                    const section = createElement("article", "entity");
+                    section.dataset.entity = entity.name;
+
+                    const header = createElement("button", "entity-header");
+                    header.type = "button";
+                    header.setAttribute("aria-expanded", "true");
+                    header.setAttribute("aria-controls", `entity-content-${entityIndex}`);
+
+                    const titleGroup = createElement("span", "entity-title");
+                    const icon = createElement("span", "entity-icon", entity.icon);
+                    icon.setAttribute("aria-hidden", "true");
+
+                    const titleText = createElement("span");
+                    const name = createElement("span", "entity-name", entity.name);
+                    const count = createElement("span", "entity-count", `${entity.fields.length} atributos`);
+
+                    titleText.append(name, count);
+                    titleGroup.append(icon, titleText);
+
+                    const toggle = createElement("span", "entity-toggle", "−");
+                    toggle.setAttribute("aria-hidden", "true");
+
+                    header.append(titleGroup, toggle);
+
+                    const content = createElement("div", "entity-content");
+                    content.id = `entity-content-${entityIndex}`;
+
+                    const scroll = createElement("div", "table-scroll");
+                    const table = document.createElement("table");
+
+                    const thead = document.createElement("thead");
+                    const headRow = document.createElement("tr");
+
+                    ["Atributo", "Descrição", "Regra de negócio associada"].forEach(label => {
+                        headRow.appendChild(createElement("th", "", label));
+                    });
+
+                    thead.appendChild(headRow);
+
+                    const tbody = document.createElement("tbody");
+
+                    entity.fields.forEach(field => {
+                        const row = document.createElement("tr");
+
+                        row.appendChild(createElement("td", "field-name", field[0]));
+                        row.appendChild(createElement("td", "description", field[1]));
+                        row.appendChild(createElement("td", "rule", field[2]));
+
+                        tbody.appendChild(row);
+                    });
+
+                    table.append(thead, tbody);
+                    scroll.appendChild(table);
+                    content.appendChild(scroll);
+                    section.append(header, content);
+
+                    header.addEventListener("click", () => {
+                        const isOpen = header.getAttribute("aria-expanded") === "true";
+
+                        header.setAttribute("aria-expanded", String(!isOpen));
+                        content.hidden = isOpen;
+                        toggle.textContent = isOpen ? "+" : "−";
+                    });
+
+                    fragment.appendChild(section);
+                });
+
+                elements.dictionary.replaceChildren(fragment);
+
+                elements.totalEntities.textContent = DATA.length;
+                elements.totalFields.textContent = DATA.reduce(
+                    (total, entity) => total + entity.fields.length,
+                    0
+                );
+
+                applyFilters();
+            }
+
+            function applyFilters() {
+                const sections = elements.dictionary.querySelectorAll(".entity");
+                let visibleEntityCount = 0;
+                let visibleFieldCount = 0;
+
+                sections.forEach(section => {
+                    const entityName = section.dataset.entity;
+                    const matchesFilter =
+                        state.filter === "all" || state.filter === entityName;
+
+                    const rows = section.querySelectorAll("tbody tr");
+                    let entityFieldCount = 0;
+
+                    rows.forEach(row => {
+                        const matchesSearch =
+                            normalize(row.textContent).includes(state.query);
+
+                        const visible = matchesFilter && matchesSearch;
+                        row.hidden = !visible;
+
+                        if (visible) entityFieldCount++;
+                    });
+
+                    const visible = matchesFilter && entityFieldCount > 0;
+                    section.hidden = !visible;
+
+                    if (visible) {
+                        visibleEntityCount++;
+                        visibleFieldCount += entityFieldCount;
+
+                        if (state.query) {
+                            const content = section.querySelector(".entity-content");
+                            const header = section.querySelector(".entity-header");
+                            const toggle = section.querySelector(".entity-toggle");
+
+                            content.hidden = false;
+                            header.setAttribute("aria-expanded", "true");
+                            toggle.textContent = "−";
+                        }
+                    }
+                });
+
+                elements.visibleFields.textContent = visibleFieldCount;
+                elements.resultText.textContent =
+                    `${visibleFieldCount} atributos encontrados em ${visibleEntityCount} entidades.`;
+
+                elements.emptyState.style.display =
+                    visibleFieldCount === 0 ? "block" : "none";
+            }
+
+            function setAllExpanded(expanded) {
+                elements.dictionary.querySelectorAll(".entity").forEach(section => {
+                    if (section.hidden) return;
+
+                    const header = section.querySelector(".entity-header");
+                    const content = section.querySelector(".entity-content");
+                    const toggle = section.querySelector(".entity-toggle");
+
+                    content.hidden = !expanded;
+                    header.setAttribute("aria-expanded", String(expanded));
+                    toggle.textContent = expanded ? "−" : "+";
+                });
+            }
+
+            elements.search.addEventListener("input", event => {
+                state.query = normalize(event.target.value);
+                applyFilters();
+            });
+
+            elements.filters.addEventListener("click", event => {
+                const button = event.target.closest("[data-filter]");
+
+                if (!button || !elements.filters.contains(button)) return;
+
+                state.filter = button.dataset.filter;
+
+                elements.filters.querySelectorAll("[data-filter]").forEach(filterButton => {
+                    const active = filterButton === button;
+                    filterButton.classList.toggle("active", active);
+                    filterButton.setAttribute("aria-pressed", String(active));
+                });
+
+                applyFilters();
+            });
+
+            elements.expandAll.addEventListener("click", () => {
+                setAllExpanded(true);
+            });
+
+            elements.collapseAll.addEventListener("click", () => {
+                setAllExpanded(false);
+            });
+
+            elements.clearSearch.addEventListener("click", () => {
+                elements.search.value = "";
+                state.query = "";
+                state.filter = "all";
+
+                elements.filters.querySelectorAll("[data-filter]").forEach(button => {
+                    const active = button.dataset.filter === "all";
+                    button.classList.toggle("active", active);
+                    button.setAttribute("aria-pressed", String(active));
+                });
+
+                applyFilters();
+                elements.search.focus();
+            });
+
+            if (
+                !elements.dictionary ||
+                !elements.search ||
+                !elements.totalEntities ||
+                !elements.totalFields ||
+                !elements.visibleFields ||
+                !elements.resultText ||
+                !elements.emptyState ||
+                !elements.filters ||
+                !elements.expandAll ||
+                !elements.collapseAll ||
+                !elements.clearSearch
+            ) {
+                console.error("Não foi possível inicializar o dicionário: elementos da interface ausentes.");
+                return;
+            }
+
+            render();
+        })();
+    </script>
+</body>
+</html>
